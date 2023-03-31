@@ -1,20 +1,19 @@
-import { client } from "./mongoConnect.js";
+import { client, fruitsCollection } from "./mongoConnect.js"
 
 // connect to the client
 client.connect();
 
 
-
-
 const addFruits = async () => {
   const myFruit = {
-    name: "Cantelope",
-    taste: "sour",
-    price: 4,
-    stock: 5,
+    name: "Avocado",
+    taste: "delicious",
+    price: 8,
+    stock: 20,
   };
+
   try {
-    const addedFruit = await collection.insertOne(myFruit);
+    const addedFruit = await fruitsCollection.insertOne(myFruit);
     console.log(addedFruit);
     
   } catch (error) {
@@ -23,28 +22,40 @@ const addFruits = async () => {
     await client.close()
   }
 };
-// addFruits()
+  addFruits()
+
 
 const editFruit = async () => {
   //collection.findOne({name: 'Cantelope'})
-  const updatedFruit = await collection.findOneAndUpdate(
-    { name: "Cantelope" },
-    { $set: { name: "Pineapple", special: true } }
+  const updatedFruit = await fruitsCollection.findOneAndUpdate(
+    { name: "Pear" },
+    { $set: { name: "Orange", special: true } }
   );
   console.log(updatedFruit);
 };
- editFruit()
+ // editFruit()
 
-// const getAllFruits = async () => {
 
-// const allFruits = await collection.find().toArray();
-// console.log(allFruits);
-// }
-// getAllFruits()
+const getAllFruits = async () => {
+  
+  try {
+    await client.connect()
+    const allFruits = await fruitsCollection.find().toArray()
+    console.log(allFruits)
+
+    } catch (error) {
+    console.log(error) 
+    } finally {
+      await client.close()
+    }
+};
+
+// getAllFruits();
+
 
 const deleteFruit = async () => {
   try {
-    const itemDelete = await collection.deleteOne({ name: "Pineapple" });
+    const itemDelete = await fruitsCollection.deleteOne({ name: "Pineapple" });
     console.log(itemDelete);  
   } catch (error) {
     console.log(error)
@@ -52,31 +63,7 @@ const deleteFruit = async () => {
     await client.close()
   }
 };
-// deleteFruit()
+ // deleteFruit()
 
-// const getAllFruits = async () => {
-//   // const allFruits = await collection.find().array()
 
-//   collection
-//     .find()
-//     .toArray()
-//     .then((items) => console.log(items))
-//     .catch((err) => console.log(err));
-
-//   // console.log(allFruits)
-// };
-
-// getAllFruits();
-
-const getAllFruits = async () => {
-  try {
-    await client.connect()
-    const allFruits = await collection.find().toArray()
-    console.log(allFruits)
-    } catch (error) {
-    console.log(error) 
-    } finally {
-      await client.close()
-    }
-}
-
+ 
